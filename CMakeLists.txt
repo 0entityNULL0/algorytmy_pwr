@@ -4,4 +4,8 @@ include_directories(HEADER_FILES)
 file(GLOB MAIN
     "main.cpp"
     )
-    add_executable(executable ${MAIN})
+    add_executable(testy ${MAIN})
+file(GLOB UNIT
+    "unit_testy.cpp"
+    )
+    add_executable(unit_testy ${UNIT})

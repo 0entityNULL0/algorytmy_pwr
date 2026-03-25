@@ -1,0 +1,4 @@
+/home/user/Desktop/studia/algo/algorytmy_pwr/CMakeFiles/testy.dir
+/home/user/Desktop/studia/algo/algorytmy_pwr/CMakeFiles/unit_testy.dir
+/home/user/Desktop/studia/algo/algorytmy_pwr/CMakeFiles/edit_cache.dir
+/home/user/Desktop/studia/algo/algorytmy_pwr/CMakeFiles/rebuild_cache.dir
