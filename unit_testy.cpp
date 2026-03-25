@@ -1,5 +1,5 @@
 #include <iostream>
-#include "sources/sortowanie_b.h"
+#include "sources/sortowania.h"
 #include <ctime>
 
 
