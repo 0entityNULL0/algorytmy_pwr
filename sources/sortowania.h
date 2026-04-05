@@ -37,15 +37,16 @@ template <typename T,typename B> void wstaw( T *kolekcja, int dlugosc, int porow
 	}
 	return;
 }
-
+/*
 template <typename T,typename B> void scal( T *kolekcja, int dlugosc, int porownanie(B,B) ){
 	if (dlugosc<=1) return;
 	int podmiana[dlugosc];
 	B tablice[2][dlugosc][2];
 	parzyste_tablice=0;
-	int dlugosc_tablice[2];
+	int dlugosc_tablice[2]=i;
 	for(int i=0; i<dlugosc; i++)
 	{
+		podmiana[i]
 		tablice[0][i][0]=i;
 		tablice[0][i][1]=i;
 	}
@@ -64,7 +65,7 @@ template <typename T,typename B> void scal_tab( T *kolekcja, int a, int b int c,
 }
 
 
-
+*/
 
 
 
