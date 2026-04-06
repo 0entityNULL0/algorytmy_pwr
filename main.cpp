@@ -1,5 +1,7 @@
 #include <iostream>
 #include "sources/sortowania.h"
+#include "sources/dane_zadaniowe.h"
+#include <fstream>
 
 int czy_wieksze(int a,int b)
 {
@@ -10,14 +12,23 @@ int czy_wieksze(int a,int b)
 
 int main()
 {
-	
-	int a[5]={3,2,7,4,5};
-	for(int i=0;i<5; i++)
-		std::cout<<a[i]<<' ';
-	std::cout<<'\n';
-	wstaw(a,5,czy_wieksze);
-	for(int i=0;i<5; i++)
-		std::cout<<a[i]<<' ';
-	std::cout<<'\n';
+	film_z_ratingiem a;
+	std::string linia;
+	std::ifstream plik("dane/basics.tsv");
+	getline(plik,linia);
+	int c = 0;
+	while(linia.length()!=0)
+	{
+		getline(plik,linia);
+		c++;
+		if(linia.length()!=0)
+			if(a.wczytaj_z_linii(linia)==-1) std::cout<<c<<'\n';
+		//else
+		//std::cout<<"aaas"<<'\n';
+		
+		//a.wczytaj_z_linii(linia);
+		//a.wypisz();
+	}
+	std::cout<<c<<'\n';
 	return 0;
 }

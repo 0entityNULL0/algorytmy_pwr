@@ -1,4 +1,19 @@
 #include <iostream>
+
+int czytaj_int(std::string linia)
+{
+	int a = 0;
+	int p = 1;
+	for(int i = linia.length()-1; i>=0; i--)
+	{
+		if(linia[i]<'0'||linia[i]>'9')
+			return -1;
+		a+=(linia[i]-'0')*p;
+		p*=10;
+	}
+	return a;
+}
+
 struct film_z_ratingiem
 {
 	int czy_dodany;
@@ -34,7 +49,7 @@ struct film_z_ratingiem
 				kolumny[i]=kolumny[i]+linia[begin];
 				begin++;
 			}
-			std::cout<<kolumny[i]<<'\n';
+			//std::cout<<kolumny[i]<<'\n';
 			if(linia[end]=='\n' && i!=8) return 1;
 			end++;
 			begin=end;
@@ -60,46 +75,20 @@ struct film_z_ratingiem
 				dla_doroslych=kolumny[4][0]-'0';
 		}else return 1;
 		
-		if(kolumny[5].length()>=2 && kolumny[5][0]==92 && kolumny[5][1]=='N') rok1=-1;
-		else
-		if(kolumny[5].length()==4)
-		{
-			std::cout<<"rok--------------\n";
-			int mnoznik=1;
-			rok1=0;
-			for(int i = 3; i>=0; i--){
-				if(kolumny[5][i]<'0'||kolumny[5][i]>'9') return 1;
-				rok1=rok1+(mnoznik*(kolumny[5][i]-'0'));
-				mnoznik*=10;
-			}
-		}else return 1;
-			std::cout<<"rok--------------2\n";
 		
-		if(kolumny[5].length()>=2 && kolumny[5][0]=='\\' && kolumny[5][1]=='N') rok2=-1;
-		else
-		if(kolumny[6].length()==4)
-		{
-			int mnoznik=1;
-			rok2=0;
-			for(int i = 3; i>=0; i--){
-				if(kolumny[6][i]<'0'||kolumny[6][i]>'9') return 1;
-				rok2=rok2+(mnoznik*(kolumny[6][i]-'0'));
-				mnoznik*=10;
-			}
-		}else return 1;
+		rok1=czytaj_int(kolumny[5]);
+		
+		rok2=czytaj_int(kolumny[6]);
+		
 		
 		if(kolumny[7].length()>=2 && kolumny[7][0]=='\\' && kolumny[7][1]=='N') dlugosc=-1;
 		else
 		if(kolumny[7].length()>0)
 		{
-			int mnoznik=1;
-			dlugosc=0;
-			for(int i = 3; i>=0; i--){
-				if(kolumny[7][i]<'0'||kolumny[7][i]>'9') return 1;
-				dlugosc=dlugosc+(mnoznik*(kolumny[7][i]-'0'));
-				mnoznik*=10;
-			}
-		}else return 1;
+			dlugosc=czytaj_int(kolumny[7]);
+		}else{ return 1;
+			std::cout<<"rok--------------2\n";
+		}
 		rodzaj=kolumny[8];
 	czy_dodany=1;
 	return 0;

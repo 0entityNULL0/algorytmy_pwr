@@ -9,3 +9,7 @@ file(GLOB UNIT
     "unit_testy.cpp"
     )
     add_executable(unit_testy ${UNIT})
+file(GLOB TREE
+    "test_drzewa.cpp"
+    )
+    add_executable(testy_drzewa ${TREE})
