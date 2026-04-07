@@ -1,3 +1,5 @@
+#ifndef DRZEWO_H
+#define DRZEWO_H
 #include <queue>
 #include <iostream>
 int max(int a, int b)
@@ -250,6 +252,7 @@ public:
 	}
 	//T* usun element();
 };
+#endif
 
 
 

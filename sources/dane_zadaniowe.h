@@ -1,3 +1,6 @@
+#ifndef DANE_ZADANIOWE_H
+#define DANE_ZADANIOWE_H
+
 #include <iostream>
 
 int czytaj_int(std::string linia)
@@ -112,9 +115,7 @@ struct film_z_ratingiem
 };
 
 
-
-
-
+#endif
 
 
 

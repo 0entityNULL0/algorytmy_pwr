@@ -1,3 +1,5 @@
+#ifndef SORTOWANIA_H
+#define SORTOWANIA_H
 #include <utility>
 template <typename T,typename B> void bombel( T *kolekcja, int dlugosc, int porownanie(B,B) ){
 	if (dlugosc<=1) return;
@@ -66,6 +68,7 @@ template <typename T,typename B> void scal_tab( T *kolekcja, int a, int b int c,
 
 
 */
+#endif
 
 
 
