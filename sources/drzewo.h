@@ -69,7 +69,7 @@ private:
 		B->wysokosc=B->p_wys();
 		D->wysokosc=D->p_wys();
 		D->nr_lisc=B->nr_lisc;
-		B->nr_lisc=2;
+		B->nr_lisc=1;
 		if(C!=nullptr){
 			C->p=B;
 			C->nr_lisc=2;
@@ -82,6 +82,91 @@ private:
 		if(c->w2!=nullptr) usun_poddrzewo(c->w2);
 		delete c->dane;
 		delete c;
+	}
+	void usun_wezel(wezel* c)
+	{
+		while(c->w1!=nullptr||c->w2!=nullptr)
+		{
+			int a=-1;
+			int b=-1;
+			if(c->w1!=nullptr) a=c->w1->wysokosc;
+			if(c->w2!=nullptr) b=c->w2->wysokosc;
+			wezel* p = c->p;
+			int lisc=c->nr_lisc;
+			wezel *obrot;
+			if(a>b)  obrot=obroc1(c);
+			else obrot=obroc2(c);
+			obrot->p=p;
+			if(p!=nullptr){
+				if(lisc==1) p->w1=obrot;
+				else p->w2=obrot;
+			}else korzen=obrot;
+		}
+		wezel * sprawdzany = c->p;
+		int lisc = c->nr_lisc;
+		delete c->dane;
+		delete c;
+		if(sprawdzany!=nullptr){
+				if(lisc==1) sprawdzany->w1=nullptr;
+				else sprawdzany->w2=nullptr;
+			}
+			wezel* potomek = nullptr;
+		while(sprawdzany!=nullptr)
+		{
+			sprawdzany->wysokosc=sprawdzany->p_wys();
+			int a=-1;
+			int b=-1;
+			if(sprawdzany->w1!=nullptr) a=sprawdzany->w1->wysokosc;
+			if(sprawdzany->w2!=nullptr) b=sprawdzany->w2->wysokosc;
+			potomek=sprawdzany;
+				//std::cout<<"a="<<a<<"; b="<<b<<";\n";
+			if(a<b-1)
+			{
+				//std::cout<<"obrot21\n";
+				wezel* przodek=sprawdzany->p;
+				wezel* obrocone=obroc2(sprawdzany);
+				obrocone->p=przodek;
+				if(przodek!=nullptr){
+				if(obrocone->nr_lisc==1)przodek->w1=obrocone;
+				else przodek->w2=obrocone;}
+				potomek=obrocone;
+				sprawdzany=przodek;
+			}else if(a>b+1)
+			{
+				//std::cout<<"obrot11\n";
+				wezel* przodek=sprawdzany->p;
+				wezel* obrocone=obroc1(sprawdzany);
+				obrocone->p=przodek;
+				if(przodek!=nullptr){
+				if(obrocone->nr_lisc==1)przodek->w1=obrocone;
+				else przodek->w2=obrocone;}
+				potomek=obrocone;
+				sprawdzany=przodek;
+			}else if(sprawdzany->nr_lisc==1&&a<b)
+			{
+				//std::cout<<"obrot22\n";
+				wezel* przodek=sprawdzany->p;
+				wezel* obrocone=obroc2(sprawdzany);
+				obrocone->p=przodek;
+				if(przodek!=nullptr){
+				if(obrocone->nr_lisc==1)przodek->w1=obrocone;
+				else przodek->w2=obrocone;}
+				potomek=obrocone;
+				sprawdzany=przodek;
+			}else if(sprawdzany->nr_lisc==2&&a>b)
+			{
+				//std::cout<<"obrot12\n";
+				wezel* przodek=sprawdzany->p;
+				wezel* obrocone=obroc1(sprawdzany);
+				obrocone->p=przodek;
+				if(przodek!=nullptr){
+				if(obrocone->nr_lisc==1)przodek->w1=obrocone;
+				else przodek->w2=obrocone;}
+				potomek=obrocone;
+				sprawdzany=przodek;
+			}else sprawdzany=sprawdzany->p;
+		}
+		korzen=potomek;
 	}
 public:
 	drzewo_zbalansowane(int por(T*,T*))
@@ -214,6 +299,24 @@ public:
 		}
 		return nullptr;
 	}
+	void usun_elem(int (*porownaj)(T*,int),int a)
+	{
+		if(korzen==nullptr) return ;
+		wezel *sprawdzany=korzen;
+		while(sprawdzany!=nullptr)
+		{
+			if(porownaj(sprawdzany->dane,a)==0)
+			{
+				usun_wezel(sprawdzany);
+				return;
+			}else if(porownaj(sprawdzany->dane,a)==1)
+			{
+				sprawdzany=sprawdzany->w1;
+			}else
+				sprawdzany=sprawdzany->w2;
+		}
+		return;
+	}
 	void wypisz_drzewo(int f(T* dane))
 	{
 		if(korzen==nullptr)
@@ -249,6 +352,58 @@ public:
 			nr_kolejki++;
 		}
 		
+	}
+	wezel* znajdz_puste(wezel *c)
+	{
+		if(c==nullptr) return nullptr;
+		 std::cout<<"error\n";
+		if(c->dane->czy_dodany==1) return c;
+		wezel* wynik = znajdz_puste(c->w1);
+		if(wynik==nullptr) wynik = znajdz_puste(c->w2);
+		return wynik;
+	}
+	int rozmiar()
+	{
+		return rozmiar(korzen);
+	}
+	int rozmiar(wezel *c)
+	{
+		if(c==nullptr) return 0;
+		int wynik = rozmiar(c->w1)+rozmiar(c->w2)+1;
+		return wynik;
+	}
+	int dodaj_do_tablicy(wezel* c,T** tablica,int rozmiar)
+	{
+		if(c==nullptr) return rozmiar;
+		rozmiar=dodaj_do_tablicy(c->w1,tablica,rozmiar);
+		//std::cout<<"dodaje na pozycje "<<rozmiar<<"\n";
+		//c->dane->wypisz();
+		tablica[rozmiar]=c->dane;
+		rozmiar=dodaj_do_tablicy(c->w2,tablica,rozmiar+1);
+		return rozmiar;
+	}
+	T** zrob_tablice_danych()
+	{
+		int rozmiar_t = rozmiar(korzen);
+		T** tablica= new T*[rozmiar_t];
+		dodaj_do_tablicy(korzen,tablica, 0);
+		return tablica;
+	}
+	int filtruj()
+	{
+		int ile_elementow=0;
+		std::cout<<ile_elementow<<'\n';std::cout<<rozmiar()<<'\n';
+		wezel * usuwany_film=znajdz_puste(korzen);
+		while(usuwany_film!=nullptr)
+		{
+			usun_wezel(usuwany_film);
+			ile_elementow++;
+			std::cout<<ile_elementow<<'\n';
+			std::cout<<rozmiar()<<'\n';
+			if(korzen==nullptr) std::cout<<"aaa\n";
+			wezel * usuwany_film=znajdz_puste(korzen);
+		}
+		return ile_elementow;
 	}
 	//T* usun element();
 };

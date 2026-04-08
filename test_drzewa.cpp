@@ -34,6 +34,7 @@ int main()
 	drzewo.wypisz_drzewo(wartosc2);
 	a=new int{4};
 	drzewo.dodaj(a);
+	std::cout<<"dawdaffs"<<drzewo.rozmiar()<<'\n';
 	drzewo.wypisz_drzewo(wartosc2);
 	a=new int{3};
 	drzewo.dodaj(a);
@@ -46,6 +47,9 @@ int main()
 	drzewo.wypisz_drzewo(wartosc2);
 	a=new int{9};
 	drzewo.dodaj(a);
+	drzewo.wypisz_drzewo(wartosc2);
+	drzewo.usun_elem(wartosc,4);
+	std::cout<<"dawdaffs"<<drzewo.rozmiar()<<'\n';
 	drzewo.wypisz_drzewo(wartosc2);
 	if(drzewo.szukaj_elementu(wartosc,5)!=nullptr) std::cout<<"znaleziono 5\n";
 	else std::cout<<"nie znaleziono 5\n";

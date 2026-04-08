@@ -17,6 +17,13 @@ int porownanie_filmy(film_z_ratingiem* a,film_z_ratingiem* b)
 	return 0;
 }
 
+int porownanie_avrg(film_z_ratingiem* a,film_z_ratingiem* b)
+{
+	if(a->rating>b->rating) return 1;
+	if(a->rating<b->rating) return -1;
+	return 0;
+}
+
 int porownanie_id(film_z_ratingiem* a,int b)
 {
 	if(a->id>b) return 1;
@@ -39,7 +46,7 @@ int main()
 	getline(plik2,linia);
 	int c = 0;
 	film_z_ratingiem *film;
-	while(linia.length()!=0&&c<10000)
+	while(linia.length()!=0&&c<100000000)
 	{
 		getline(plik2,linia);
 		c++;
@@ -63,7 +70,7 @@ int main()
 	film_z_ratingiem b;
 	c=0;
 	getline(plik,linia);
-	while(linia.length()!=0&&c<10000)
+	while(linia.length()!=0&&c<100000000)
 	{
 		getline(plik,linia);
 	//std::cout<<c<<'\n';
@@ -89,9 +96,14 @@ int main()
 	c=drzewo_filmow.rozmiar();
 	
 	film_z_ratingiem **tablica=drzewo_filmow.zrob_tablice_danych();
-	for(int i = 0; i<c; i++)
-		tablica[i]->wypisz();
+	//for(int i = 0; i<c; i++)
+	//	tablica[i]->wypisz();
 	//c=drzewo_filmow.filtruj();
+	scal(tablica,c,porownanie_avrg);
+	std::ofstream plik3("dane/wynik.tsv");
+	plik3<<"tconst\ttitleType\tprimaryTitle\toriginalTitle\tisAdult\tstartYear\tendYear\truntimeMinutes\tgenres\taverageRating\tnumVotes";
+	for(int i = 0; i<c; i++)
+		tablica[i]->wpisz(&plik3);
 	std::cout<<c<<'\n';
 	return 0;
 }

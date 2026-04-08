@@ -2,6 +2,7 @@
 #define DANE_ZADANIOWE_H
 
 #include <iostream>
+#include <fstream>
 
 int czytaj_int(std::string linia)
 {
@@ -16,6 +17,65 @@ int czytaj_int(std::string linia)
 	}
 	return a;
 }
+
+int czytaj_id(std::string linia)
+{
+	int a = 0;
+	int p = 1;
+	for(int i = linia.length()-1; i>=2; i--)
+	{
+		if(linia[i]<'0'||linia[i]>'9')
+			return -1;
+		a+=(linia[i]-'0')*p;
+		p*=10;
+	}
+	return a;
+}
+
+struct ratings
+{
+	int id;
+	int avg;
+	int c;
+	void wypisz()
+	{
+		std::cout<<"id: "<<id<<"; avg: "<<avg<<"; c: "<<c<<"\n";
+	}
+	int wczytaj_z_linii(std::string linia)
+	{
+		if(linia.length()==0) return 1;
+		int begin=0;
+		int end=0;
+		
+		std::string kolumny[3];
+		for(int i = 0; i<3; i++){
+			if(end>=linia.length()) return 1;
+			while(linia[end]!='\t'&&linia[end]!='\t'&&end<linia.length())
+				end++;
+			kolumny[i]="";
+			while(begin<end){
+				kolumny[i]=kolumny[i]+linia[begin];
+				begin++;
+			}
+			if(linia[end]=='\n' && i!=3) return 1;
+			end++;
+			begin=end;
+		}
+		id=czytaj_id(kolumny[0]);
+		avg=0;
+		int mnoznik=1;
+		for(int i = kolumny[1].length(); i >=0;i--)
+		{
+			if(kolumny[1][i]>='0'&&kolumny[1][i]<='9')
+			{
+				avg=avg+(mnoznik*(kolumny[1][i]-'0'));
+				mnoznik*=10;
+			}
+		}
+		c=czytaj_int(kolumny[2]);
+		return 0;
+	}
+};
 
 struct film_z_ratingiem
 {
@@ -57,16 +117,7 @@ struct film_z_ratingiem
 			end++;
 			begin=end;
 		}
-		if(kolumny[0].length()==9)
-		{
-			int mnoznik=1;
-			id=0;
-			for(int i = 8; i>1; i--){
-				if(kolumny[0][i]<'0'||kolumny[0][i]>'9') return 1;
-				id=id+(mnoznik*(kolumny[0][i]-'0'));
-				mnoznik*=10;
-			}
-		}else return 1;
+		id=czytaj_id(kolumny[0]);
 		typ=kolumny[1];
 		tytul1=kolumny[2];
 		tytul2=kolumny[3];
@@ -112,8 +163,30 @@ struct film_z_ratingiem
 		std::cout<<"dlugosc: "<<dlugosc<<'\n';
 		std::cout<<"rodzaj: "<<rodzaj<<'\n';
 	}
+	void wpisz(std::ofstream *plik)
+	{
+		*plik<<"tt";
+		int a = id;
+		while(a<1000000)
+		{
+			*plik<<0;
+			a*=10;
+		}
+		*plik<<id<<"\t"<<typ<<"\t"<<tytul1<<"\t"<<tytul2<<"\t";
+		if(dla_doroslych==-1) *plik<<"\\N\t";
+		else *plik<<dla_doroslych<<"\t";
+		if(rok1==-1) *plik<<"\\N\t";
+		else *plik<<rok1<<"\t";
+		if(rok2==-1) *plik<<"\\N\t";
+		else *plik<<rok2<<"\t";
+		if(dlugosc==-1) *plik<<"\\N\t";
+		else *plik<<dlugosc<<"\t";
+		*plik<<rodzaj<<"\t";
+		*plik<<rating/10<<'.'<<rating%10<<"\t"<<glosy<<"\n";
+		
+	}
 };
-
+//drzewo_zbalansowane <film_z_ratingiem>* wczytaj_ratingi(std::string nazwa_pliku)
 
 #endif
 
